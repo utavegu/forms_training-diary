@@ -3,20 +3,18 @@ import DiaryForm from './DiaryForm'
 import DiaryTable from './DiaryTable'
 import DiaryModel from '../models/DiaryModel'
 
+// В идеале - редактирование тоже прикрутить после курса + сторадж
+
 function TrainingDiary() {
   const [diary, setDiary] = useState([
     new DiaryModel("17.09.20", 5.2),
     new DiaryModel("19.09.20", 3.46),
     new DiaryModel("21.09.20", 8.241),
   ])
-  
-  const handleDateChange = evt => {
-    evt.preventDefault();
-    // Я понимаю, что в этой функции творится полнейшая дичь, но как сделать иначе я не соображу
-    // Вот особенно прямо тут... наверное через useRef нужно было сделать, да?
-    // Или через useState? Что-то у меня в этом месте затуп случился
-    const dateFromForm = evt.target.childNodes[0].childNodes[1].value
-    let distanceFromForm = evt.target.childNodes[1].childNodes[1].value
+
+  const handleAdd = (data) => {
+    const dateFromForm = data.date;
+    let distanceFromForm = data.distance;
 
     diary.forEach(currentRecord => {
       if (currentRecord.date === dateFromForm) {
@@ -34,15 +32,16 @@ function TrainingDiary() {
   }
 
   // Странный момент, но эта конструкция работала, даже когда была внутри консоль лога... баг?
+  // Переделать: привести дату к unix-формату (миллисекундам) и сортировать эти значения.
   diary.sort((a, b) => {
     return (
-      (b.date.substring(6,8) +b.date.substring(3,5) + b.date.substring(0,2)) - (a.date.substring(6,8) + a.date.substring(3,5) + a.date.substring(0,2))
+      (b.date.substring(6,8) + b.date.substring(3,5) + b.date.substring(0,2)) - (a.date.substring(6,8) + a.date.substring(3,5) + a.date.substring(0,2))
       )
     });
  
   return (
     <div className="workspace">
-      <DiaryForm onDiary={handleDateChange} />
+      <DiaryForm onAdd={handleAdd} />
       <DiaryTable diaryData={diary} onRemove={handleRemove} />
     </div>
   )

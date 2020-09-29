@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {nanoid} from "nanoid"
-// import TableRow from './TableRow' //Сначала декомпозировал, но потом прикурил пробрасывать пропсы и раскомпозировал обратно
 
 function DiaryTable({diaryData, onRemove: handleRemove}) {
   return (
